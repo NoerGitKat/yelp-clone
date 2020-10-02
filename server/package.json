@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node backend/server.js",
+    "server": "nodemon --watch . --exec babel-node server.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.0",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
