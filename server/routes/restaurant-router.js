@@ -11,7 +11,13 @@ import {
   deleteSingleRestaurant,
 } from "./../controllers/restaurant-controller";
 
-restaurantRouter.route("/").get(getRestaurants).post(createRestaurant);
+// Validators
+import validateNewRestaurant from "./../util/validation/validateNewRestaurant";
+
+restaurantRouter
+  .route("/")
+  .get(getRestaurants)
+  .post(validateNewRestaurant, createRestaurant);
 
 restaurantRouter
   .route("/:id")

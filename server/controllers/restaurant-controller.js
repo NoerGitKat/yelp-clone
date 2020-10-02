@@ -1,4 +1,5 @@
 import db from "./../db";
+import { validationResult } from "express-validator";
 
 const getRestaurants = async (req, res) => {
   try {
@@ -17,15 +18,42 @@ const getRestaurants = async (req, res) => {
 };
 
 const createRestaurant = async (req, res) => {
+  const { name, location, price_range } = req.body;
+
+  // 1. Validate input fields
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ status: "failed", data: errors });
+  }
+
   try {
-    // 1. Validate input fields
-
     // 2. Check if restaurant already exists
+    const restaurant = await db.query(
+      "SELECT * FROM restaurant WHERE name = $1;",
+      [name]
+    );
 
+    if (restaurant.rows[0].name === name) {
+      return res
+        .status(422)
+        .json({ status: "failed", data: "Restaurant already exists!" });
+    }
+
+    console.log("trigger 1", name);
     // 3. If not exists, create new restaurant
+    const newRestaurant = await db.query(
+      "INSERT INTO restaurant (name, location, price_range) VALUES ($1, $2, $3);",
+      [name, location, price_range]
+    );
+    console.log("trigger 2", name);
 
     // 4. Send success response to client
-    return res.status(201).json({});
+    return res.status(201).json({
+      status: "success",
+      data: {
+        restaurant: newRestaurant,
+      },
+    });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }
@@ -53,9 +81,11 @@ const getSingleRestaurant = async (req, res) => {
     return res.status(500).json({ status: "failed", data: error.message });
   }
 };
+
 const updateSingleRestaurant = (req, res) => {
   const { id } = req.params;
 };
+
 const deleteSingleRestaurant = (req, res) => {
   const { id } = req.params;
 };
