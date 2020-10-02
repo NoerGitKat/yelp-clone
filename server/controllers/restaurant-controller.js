@@ -10,9 +10,9 @@ const getRestaurants = async (req, res) => {
       results: restaurants.length,
       data: { restaurants },
     });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ data: err.message });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: "failed", data: error.message });
   }
 };
 
@@ -31,8 +31,27 @@ const createRestaurant = async (req, res) => {
   }
 };
 
-const getSingleRestaurant = (req, res) => {
+const getSingleRestaurant = async (req, res) => {
   const { id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      "SELECT * FROM restaurant WHERE id = $1",
+      [id]
+    );
+    const restaurant = dbResponse.rows[0];
+
+    if (!restaurant) {
+      return res
+        .status(404)
+        .json({ status: "failed", data: "No restaurant found..." });
+    }
+
+    return res.status(200).json({ status: "success", data: { restaurant } });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: "failed", data: error.message });
+  }
 };
 const updateSingleRestaurant = (req, res) => {
   const { id } = req.params;
