@@ -33,28 +33,27 @@ const createRestaurant = async (req, res) => {
       [name]
     );
 
-    if (restaurant.rows[0].name === name) {
+    if (restaurant.rows[0]) {
       return res
         .status(422)
         .json({ status: "failed", data: "Restaurant already exists!" });
     }
 
-    console.log("trigger 1", name);
     // 3. If not exists, create new restaurant
     const newRestaurant = await db.query(
-      "INSERT INTO restaurant (name, location, price_range) VALUES ($1, $2, $3);",
+      "INSERT INTO restaurant (name, location, price_range) VALUES ($1, $2, $3) RETURNING *;",
       [name, location, price_range]
     );
-    console.log("trigger 2", name);
 
     // 4. Send success response to client
     return res.status(201).json({
       status: "success",
       data: {
-        restaurant: newRestaurant,
+        restaurant: newRestaurant.rows[0],
       },
     });
   } catch (err) {
+    console.log("trigger error!", err);
     return res.status(500).json({ msg: err.message });
   }
 };
