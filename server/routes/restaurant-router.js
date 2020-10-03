@@ -12,17 +12,17 @@ import {
 } from "./../controllers/restaurant-controller";
 
 // Validators
-import validateNewRestaurant from "./../util/validation/validateNewRestaurant";
+import validateRestaurant from "../util/validation/validateRestaurant";
 
 restaurantRouter
   .route("/")
   .get(getRestaurants)
-  .post(validateNewRestaurant, createRestaurant);
+  .post(validateRestaurant, createRestaurant);
 
 restaurantRouter
   .route("/:id")
   .get(getSingleRestaurant)
-  .put(updateSingleRestaurant)
+  .put(validateRestaurant, updateSingleRestaurant)
   .delete(deleteSingleRestaurant);
 
 export default restaurantRouter;

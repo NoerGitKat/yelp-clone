@@ -1,6 +1,6 @@
 import { check } from "express-validator";
 
-const validateNewRestaurant = [
+const validateRestaurant = [
   check("name")
     .isLength({
       min: 3,
@@ -16,4 +16,4 @@ const validateNewRestaurant = [
     .withMessage("The price range should be between 1 - 5"),
 ];
 
-export default validateNewRestaurant;
+export default validateRestaurant;

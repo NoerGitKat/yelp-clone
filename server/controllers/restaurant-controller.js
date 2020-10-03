@@ -81,12 +81,73 @@ const getSingleRestaurant = async (req, res) => {
   }
 };
 
-const updateSingleRestaurant = (req, res) => {
+const updateSingleRestaurant = async (req, res) => {
+  const { name, location, price_range } = req.body;
   const { id } = req.params;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ status: "failed", data: errors });
+  }
+
+  try {
+    const restaurantExists = await db.query(
+      "SELECT * FROM restaurant WHERE id = $1",
+      [id]
+    );
+
+    if (restaurantExists.rows.length > 0) {
+      const dbResponse = await db.query(
+        "UPDATE restaurant SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *",
+        [name, location, price_range, id]
+      );
+
+      const updatedRestaurant = dbResponse.rows[0];
+
+      return res
+        .status(200)
+        .json({ status: "success", data: { updatedRestaurant } });
+    } else {
+      return res
+        .status(404)
+        .json({ status: "failed", data: "Restaurant doesn't exist!" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: "failed", data: error.message });
+  }
 };
 
-const deleteSingleRestaurant = (req, res) => {
+const deleteSingleRestaurant = async (req, res) => {
   const { id } = req.params;
+
+  try {
+    const restaurantExists = await db.query(
+      "SELECT * FROM restaurant WHERE id = $1",
+      [id]
+    );
+
+    if (restaurantExists.rows.length > 0) {
+      const dbResponse = await db.query(
+        "DELETE FROM restaurant WHERE id = $1",
+        [id]
+      );
+
+      return res
+        .status(204)
+        .json({
+          status: "success",
+          data: "Restaurant has been successfully deleted!",
+        });
+    } else {
+      return res
+        .status(404)
+        .json({ status: "failed", data: "Restaurant doesn't exist!" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: "failed", data: error.message });
+  }
 };
 
 export {
