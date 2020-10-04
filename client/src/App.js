@@ -7,21 +7,33 @@ import Homepage from "./pages/Homepage";
 import RestaurantDetailsPage from "./pages/RestaurantDetailsPage";
 import UpdatePage from "./pages/UpdatePage";
 
+// Context
+import {
+  RestaurantsContext,
+  RestaurantsContextProvider,
+} from "./context/RestaurantsContext";
+
 function App() {
   return (
-    <div className="container">
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Homepage} />
-          <Route exact path="/restaurants/:id/update" component={UpdatePage} />
-          <Route
-            exact
-            path="/restaurants/:id"
-            component={RestaurantDetailsPage}
-          />
-        </Switch>
-      </Router>
-    </div>
+    <RestaurantsContextProvider>
+      <div className="container">
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Homepage} />
+            <Route
+              exact
+              path="/restaurants/:id/update"
+              component={UpdatePage}
+            />
+            <Route
+              exact
+              path="/restaurants/:id"
+              component={RestaurantDetailsPage}
+            />
+          </Switch>
+        </Router>
+      </div>
+    </RestaurantsContextProvider>
   );
 }
 
