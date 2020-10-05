@@ -22,6 +22,8 @@ const RestaurantList = () => {
     fetchRestaurants();
   }, []);
 
+  console.log("restaurants", restaurants);
+
   return (
     <div>
       <table className="table table-hover table-dark">
@@ -36,10 +38,11 @@ const RestaurantList = () => {
           </tr>
         </thead>
         <tbody>
-          {restaurants.map((restaurant, i) => {
+          {restaurants.map((restaurant) => {
             return (
               <ListRow
-                key={i}
+                key={`restaurant${restaurant.id}`}
+                id={restaurant.id}
                 name={restaurant.name}
                 location={restaurant.location}
                 price_range={restaurant.price_range}
