@@ -6,15 +6,17 @@ const ListRow = ({ id, name, location, price_range, rating }) => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
 
   const handleDeleteRestaurant = async (id) => {
-    await axios.delete(`/${id}`);
+    try {
+      await axios.delete(`/${id}`);
 
-    const filteredRestaurants = restaurants.filter(
-      (restaurant) => restaurant.id !== id
-    );
+      const filteredRestaurants = restaurants.filter(
+        (restaurant) => restaurant.id !== id
+      );
 
-    console.log("filtered", filteredRestaurants);
-
-    setRestaurants(filteredRestaurants);
+      setRestaurants(filteredRestaurants);
+    } catch (error) {
+      console.error(error);
+    }
 
     return;
   };

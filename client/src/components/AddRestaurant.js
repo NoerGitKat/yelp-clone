@@ -17,8 +17,8 @@ const AddRestaurant = () => {
         price_range: parseInt(price_range),
       };
 
-      console.log(newRestaurant);
-      const response = await axios.post("/", newRestaurant);
+      await axios.post("/", newRestaurant);
+
       addRestaurant(newRestaurant);
 
       return;
