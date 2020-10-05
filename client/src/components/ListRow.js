@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import axios from "./../util/http-request";
+import { useHistory } from "react-router-dom";
 
 const ListRow = ({ id, name, location, price_range, rating }) => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const history = useHistory();
 
   const handleDeleteRestaurant = async (id) => {
     try {
@@ -21,6 +23,10 @@ const ListRow = ({ id, name, location, price_range, rating }) => {
     return;
   };
 
+  const handleUpdate = (id) => {
+    history.push(`/restaurants/${id}/update`);
+  };
+
   return (
     <tr>
       <td>{name}</td>
@@ -28,7 +34,9 @@ const ListRow = ({ id, name, location, price_range, rating }) => {
       <td>{"$".repeat(price_range)}</td>
       <td>{rating}</td>
       <td>
-        <button className="btn btn-warning">Update</button>
+        <button className="btn btn-warning" onClick={() => handleUpdate(id)}>
+          Update
+        </button>
       </td>
       <td>
         <button

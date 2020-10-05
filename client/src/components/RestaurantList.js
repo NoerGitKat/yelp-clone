@@ -22,6 +22,8 @@ const RestaurantList = () => {
     fetchRestaurants();
   }, []);
 
+  console.log("restaurants", restaurants);
+
   return (
     <div>
       <table className="table table-hover table-dark">
