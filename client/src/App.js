@@ -8,10 +8,7 @@ import RestaurantDetailsPage from "./pages/RestaurantDetailsPage";
 import UpdatePage from "./pages/UpdatePage";
 
 // Context
-import {
-  RestaurantsContext,
-  RestaurantsContextProvider,
-} from "./context/RestaurantsContext";
+import { RestaurantsContextProvider } from "./context/RestaurantsContext";
 
 function App() {
   return (
