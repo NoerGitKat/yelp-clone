@@ -22,6 +22,8 @@ const RestaurantList = () => {
     fetchRestaurants();
   }, [setRestaurants]);
 
+  console.log(restaurants);
+
   return (
     <div>
       <table className="table table-hover table-dark">
@@ -44,7 +46,8 @@ const RestaurantList = () => {
                 name={restaurant.name}
                 location={restaurant.location}
                 price_range={restaurant.price_range}
-                rating={restaurant.rating}
+                average_rating={restaurant.average_rating}
+                count={restaurant.count}
               />
             );
           })}

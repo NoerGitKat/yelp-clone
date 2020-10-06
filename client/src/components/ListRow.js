@@ -2,8 +2,16 @@ import React, { useContext } from "react";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import axios from "./../util/http-request";
 import { useHistory } from "react-router-dom";
+import AverageRating from "./AverageRating";
 
-const ListRow = ({ id, name, location, price_range, rating }) => {
+const ListRow = ({
+  id,
+  name,
+  location,
+  price_range,
+  count,
+  average_rating,
+}) => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const history = useHistory();
 
@@ -38,7 +46,13 @@ const ListRow = ({ id, name, location, price_range, rating }) => {
       <td>{name}</td>
       <td>{location}</td>
       <td>{"$".repeat(price_range)}</td>
-      <td>{rating}</td>
+      <td>
+        {count > 0 ? (
+          <AverageRating rating={average_rating} count={count} />
+        ) : (
+          <span className="text-warning">0 reviews</span>
+        )}
+      </td>
       <td>
         <button
           className="btn btn-warning"

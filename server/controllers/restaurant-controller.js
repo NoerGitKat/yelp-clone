@@ -3,7 +3,10 @@ import { validationResult } from "express-validator";
 
 const getRestaurants = async (req, res) => {
   try {
-    const dbResponse = await db.query("SELECT * FROM restaurant;");
+    const dbResponse = await db.query(
+      "SELECT * FROM restaurant LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating FROM review GROUP BY restaurant_id) review ON restaurant.id = review.restaurant_id;"
+    );
+
     const restaurants = dbResponse.rows;
 
     return res.status(200).json({
@@ -63,7 +66,7 @@ const getSingleRestaurant = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      "SELECT * FROM restaurant WHERE id = $1;",
+      "SELECT * FROM restaurant LEFT JOIN (select restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating FROM review group by restaurant_id) review ON restaurant.id = review.restaurant_id where id = $1",
       [id]
     );
 

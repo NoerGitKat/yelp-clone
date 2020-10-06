@@ -3,7 +3,7 @@ import Review from "./Review";
 
 const AllReviews = ({ reviews }) => {
   return (
-    <div className="row row-cols-3 mb-2">
+    <div className="row row-cols-3 mb-2 mt-2" style={{ marginLeft: 0 }}>
       {reviews.map((review) => {
         return (
           <Review

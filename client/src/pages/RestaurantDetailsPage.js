@@ -6,6 +6,7 @@ import axios from "./../util/http-request";
 import AllReviews from "./../components/AllReviews";
 import AddReview from "./../components/AddReview";
 import Header from "./../components/Header";
+import AverageRating from "./../components/AverageRating";
 
 const RestaurantDetailsPage = () => {
   const { id } = useParams();
@@ -24,13 +25,23 @@ const RestaurantDetailsPage = () => {
       }
     }
     fetchRestaurant();
-  }, [selectedRestaurant, setSelectedRestaurant, id]);
+  }, [setSelectedRestaurant, id]);
 
   return (
     <div className="mt-3">
       {selectedRestaurant && (
         <Header headerText={selectedRestaurant.restaurant.name} />
       )}
+      <div className="text-center">
+        {selectedRestaurant && selectedRestaurant.restaurant.count > 0 ? (
+          <AverageRating
+            count={selectedRestaurant.restaurant.count}
+            rating={selectedRestaurant.restaurant.average_rating}
+          />
+        ) : (
+          <span className="text-warning">0 reviews</span>
+        )}
+      </div>
       {selectedRestaurant && (
         <AllReviews reviews={selectedRestaurant.reviews} />
       )}
