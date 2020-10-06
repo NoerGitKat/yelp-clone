@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import axios from "./../util/http-request";
 
-import StarRating from "./../components/StarRating";
+import AllReviews from "./../components/AllReviews";
+import AddReview from "./../components/AddReview";
 
 const RestaurantDetailsPage = () => {
   const { id } = useParams();
@@ -25,8 +26,9 @@ const RestaurantDetailsPage = () => {
   }, [setSelectedRestaurant, id]);
 
   return (
-    <div>
-      <StarRating rating={4} />
+    <div className="mt-3">
+      <AllReviews />
+      <AddReview />
     </div>
   );
 };
