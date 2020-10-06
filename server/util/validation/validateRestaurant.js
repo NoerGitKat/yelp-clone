@@ -12,7 +12,7 @@ const validateRestaurant = [
     })
     .withMessage("Please fill in a location of at least 3 characters."),
   check("price_range")
-    .isNumeric()
+    .isInt({ min: 1, max: 5 })
     .withMessage("The price range should be between 1 - 5"),
 ];
 

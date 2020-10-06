@@ -63,10 +63,17 @@ const getSingleRestaurant = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      "SELECT * FROM restaurant WHERE id = $1",
+      "SELECT * FROM restaurant WHERE id = $1;",
       [id]
     );
+
+    const dbResponse2 = await db.query(
+      "SELECT * FROM review WHERE restaurant_id = $1;",
+      [id]
+    );
+
     const restaurant = dbResponse.rows[0];
+    const reviews = dbResponse2.rows;
 
     if (!restaurant) {
       return res
@@ -74,7 +81,9 @@ const getSingleRestaurant = async (req, res) => {
         .json({ status: "failed", data: "No restaurant found..." });
     }
 
-    return res.status(200).json({ status: "success", data: { restaurant } });
+    return res
+      .status(200)
+      .json({ status: "success", data: { restaurant, reviews } });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: "failed", data: error.message });
@@ -92,13 +101,13 @@ const updateSingleRestaurant = async (req, res) => {
 
   try {
     const restaurantExists = await db.query(
-      "SELECT * FROM restaurant WHERE id = $1",
+      "SELECT * FROM restaurant WHERE id = $1;",
       [id]
     );
 
     if (restaurantExists.rows.length > 0) {
       const dbResponse = await db.query(
-        "UPDATE restaurant SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *",
+        "UPDATE restaurant SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *;",
         [name, location, price_range, id]
       );
 
@@ -123,26 +132,59 @@ const deleteSingleRestaurant = async (req, res) => {
 
   try {
     const restaurantExists = await db.query(
-      "SELECT * FROM restaurant WHERE id = $1",
+      "SELECT * FROM restaurant WHERE id = $1;",
       [id]
     );
 
     if (restaurantExists.rows.length > 0) {
       const dbResponse = await db.query(
-        "DELETE FROM restaurant WHERE id = $1",
+        "DELETE FROM restaurant WHERE id = $1;",
         [id]
       );
 
-      return res
-        .status(204)
-        .json({
-          status: "success",
-          data: "Restaurant has been successfully deleted!",
-        });
+      return res.status(204).json({
+        status: "success",
+        data: "Restaurant has been successfully deleted!",
+      });
     } else {
       return res
         .status(404)
         .json({ status: "failed", data: "Restaurant doesn't exist!" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: "failed", data: error.message });
+  }
+};
+
+const addReviewToRestaurant = async (req, res) => {
+  const { id } = req.params;
+  const { name, rating, reviewText } = req.body;
+
+  // 1. Validate input fields
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ status: "failed", data: errors });
+  }
+
+  try {
+    const restaurantExists = await db.query(
+      "SELECT * FROM restaurant WHERE id = $1;",
+      [id]
+    );
+
+    if (restaurantExists.rows.length > 0) {
+      const dbResponse = await db.query(
+        "INSERT INTO review (restaurant_id, name, rating, reviewText) VALUES ($1, $2, $3, $4) RETURNING *;",
+        [id, name, rating, reviewText]
+      );
+
+      return res.status(201).json({
+        status: "success",
+        data: {
+          review: dbResponse.rows[0],
+        },
+      });
     }
   } catch (error) {
     console.log(error);
@@ -156,4 +198,5 @@ export {
   getSingleRestaurant,
   updateSingleRestaurant,
   deleteSingleRestaurant,
+  addReviewToRestaurant,
 };

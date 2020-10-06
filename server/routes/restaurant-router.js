@@ -9,10 +9,12 @@ import {
   getSingleRestaurant,
   updateSingleRestaurant,
   deleteSingleRestaurant,
+  addReviewToRestaurant,
 } from "./../controllers/restaurant-controller";
 
 // Validators
 import validateRestaurant from "../util/validation/validateRestaurant";
+import validateReview from "../util/validation/validateReview";
 
 restaurantRouter
   .route("/")
@@ -24,5 +26,9 @@ restaurantRouter
   .get(getSingleRestaurant)
   .put(validateRestaurant, updateSingleRestaurant)
   .delete(deleteSingleRestaurant);
+
+restaurantRouter
+  .route("/:id/reviews")
+  .post(validateReview, addReviewToRestaurant);
 
 export default restaurantRouter;

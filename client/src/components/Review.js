@@ -1,20 +1,20 @@
 import React from "react";
 import StarRating from "./StarRating";
 
-const Review = () => {
+const Review = ({ name, rating, reviewText }) => {
   return (
     <div
       className="card text-white bg-primary mb-3 mr-4"
       style={{ maxWidth: "30%" }}
     >
       <div className="card-header d-flex justify-content-between">
-        <span>Karel</span>
+        <span>{name}</span>
         <span>
-          <StarRating rating={4} />
+          <StarRating rating={rating} />
         </span>
       </div>
       <div className="card-body">
-        <p className="card-text">This restaurant was amazing</p>
+        <p className="card-text">{reviewText}</p>
       </div>
     </div>
   );

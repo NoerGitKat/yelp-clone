@@ -5,6 +5,7 @@ import axios from "./../util/http-request";
 
 import AllReviews from "./../components/AllReviews";
 import AddReview from "./../components/AddReview";
+import Header from "./../components/Header";
 
 const RestaurantDetailsPage = () => {
   const { id } = useParams();
@@ -16,18 +17,23 @@ const RestaurantDetailsPage = () => {
     async function fetchRestaurant() {
       try {
         const response = await axios.get(`/${id}`);
-        const { restaurant } = response.data.data;
-        setSelectedRestaurant(restaurant);
+        const { data } = response.data;
+        setSelectedRestaurant(data);
       } catch (error) {
         console.error(error);
       }
     }
     fetchRestaurant();
-  }, [setSelectedRestaurant, id]);
+  }, [selectedRestaurant, setSelectedRestaurant, id]);
 
   return (
     <div className="mt-3">
-      <AllReviews />
+      {selectedRestaurant && (
+        <Header headerText={selectedRestaurant.restaurant.name} />
+      )}
+      {selectedRestaurant && (
+        <AllReviews reviews={selectedRestaurant.reviews} />
+      )}
       <AddReview />
     </div>
   );
