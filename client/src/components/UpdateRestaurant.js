@@ -36,7 +36,7 @@ const UpdateRestaurant = () => {
     }
 
     fetchRestaurant(id);
-  }, []);
+  }, [id]);
 
   return (
     <form onSubmit={handleSubmit}>

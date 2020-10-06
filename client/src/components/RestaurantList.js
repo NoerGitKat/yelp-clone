@@ -20,9 +20,7 @@ const RestaurantList = () => {
     }
 
     fetchRestaurants();
-  }, []);
-
-  console.log("restaurants", restaurants);
+  }, [setRestaurants]);
 
   return (
     <div>
